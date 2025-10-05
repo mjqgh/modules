@@ -497,4 +497,46 @@ def book_count_down(cookie, start_date, end_date):  # 书籍统计表-导出接�
     time.sleep(1)
     df = pd.read_csv("书籍统计_英语.txt")
     return df
-    
+
+
+def book_analysis(start_date, end_date, book_id=""):
+    # 广告后台【书籍分析】
+    session = requests.Session()
+
+    login_url = 'https://ads.hinw2a.com/api/admin/login.json'
+    post_data = {
+        "username": "YgRpLOyzwOi6k+TxuWY5ug==",
+        "password": "PRFqLbWjAzO7kkMYQJPHzg==",
+    }
+    headers = {
+        "X-ads-aid": "hinovel",
+        "X-ads-ip": "8.219.67.223",
+        "X-ads-timestamp": f"{int(time.time())}",
+    }
+    response = session.post(login_url, json=post_data, headers=headers)
+    access_token = response.json()['data']['access_token']  # 提取 access_token
+
+    base_url = "https://ads.hinw2a.com/api/lighthouse/ad_book_analysis.json"
+    params = {
+        "client_type": "",
+        "ad_channel": "",
+        "lang": "en",
+        "book_id": f"{book_id}",
+        "date_ranges": f"{start_date}_{end_date}",
+        "user_scope": "valid_user",
+        "valid_recovery_day": "90",
+        "sort_by": "desc",
+        "sort_field": "total_roi",
+        "page": "1",
+        "limit": "10000"
+    }
+
+    headers = {
+        "X-ads-aid": "hinovel",
+        "X-ads-ip": "8.219.67.223",
+        "X-ads-timestamp": f"{int(time.time())}",
+        "Authorization": f"Bearer {access_token}",
+    }
+    rsp = session.get(url=base_url, params=params, headers=headers).json()
+    df = pd.DataFrame(rsp['data']['list'])
+    return df
