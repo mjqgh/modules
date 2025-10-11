@@ -540,3 +540,44 @@ def book_analysis(start_date, end_date, username, password, book_id=""):
     rsp = session.get(url=base_url, params=params, headers=headers).json()
     df = pd.DataFrame(rsp['data']['list'])
     return df
+
+def book_retention_new(cookie: str, book_id: int, start: str, end: str) -> pd.DataFrame:
+    # 获取书籍留存数据，返回DataFrame
+    api = f"https://manage.hinw2a.com/BookRetention/bookDetail"
+    params = {
+        "page": 1,
+        "limit": 20,
+        "book_id": book_id,
+        "date": f"{start} - {end}", 
+        "user_type": 0   # 0: 全部用户, 1: 新读者, 2: 活跃老读者, 3: 休眠老读者
+    }
+    headers = {
+        "Cookie": cookie,
+        "X-Requested-With": "XMLHttpRequest"
+    }
+
+    rsp = requests.get(url=api, params=params, headers=headers).json()
+    count = int(rsp["count"])
+    total_page = (count - 1) // 20 + 1
+
+    for page in range(1, total_page + 1):
+        print(f"正在处理第{page}页，共{total_page}页")
+        params["page"] = page
+        rsp = requests.get(url=api, params=params, headers=headers).json()
+        df_page = pd.DataFrame(rsp["data"])
+        if page == 1:
+            df = df_page.copy()
+        else:
+            df = pd.concat([df, df_page], ignore_index=True)
+
+    df[["stay_rate", "follow_rate"]] = df[["stay_rate", "follow_rate"]].applymap(lambda x: float(re.sub(r"<span class='color_green'>(.*?)%</span>", r"\1", str(x))) if isinstance(x, str) else x)
+    df["num_day_stay"] = df["list_order"] - 1
+
+    # list_order
+    # current_chapter_users_total # 各章阅读人数
+    # until_chapter_users_total	
+    # stay_retention_users
+    # stay_rate
+    # follow_rate
+    # num_day_stay
+    return df
