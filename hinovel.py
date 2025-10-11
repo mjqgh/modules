@@ -562,7 +562,7 @@ def book_retention_new(cookie: str, book_id: int, start: str, end: str) -> pd.Da
     total_page = (count - 1) // 20 + 1
 
     for page in range(1, total_page + 1):
-        print(f"正在处理第{page}页，共{total_page}页")
+        # print(f"正在处理第{page}页，共{total_page}页")
         params["page"] = page
         rsp = requests.get(url=api, params=params, headers=headers).json()
         df_page = pd.DataFrame(rsp["data"])
