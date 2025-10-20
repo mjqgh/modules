@@ -542,6 +542,45 @@ def book_analysis(start_date, end_date, username, password, book_id=""):
     df = pd.DataFrame(rsp['data']['list'])
     return df
 
+def book_retention_old(cookie: str, book_id: int, start: str, end: str) -> pd.DataFrame:
+    api = f"https://manage.hinw2a.com/BookEfficiency/detail?book_id={book_id}&os_type=-1&date={start}%20-%20{end}"
+    headers = {"Cookie": cookie}
+
+    rsp = requests.get(url=api, headers=headers).text
+
+    p = re.compile(r"let data ?= ?(.*?);")
+    res = p.search(rsp).group(1)
+    list_dict_res = eval(res)
+    df = pd.DataFrame(list_dict_res)
+    df["list_order"] = df["list_order"].astype("int")
+    df["chapter_read_num"] = df["chapter_read_num"].astype("int")
+
+    # 锁章转化率
+    p_begin_cost = re.compile(r'let begin_cost_section_id = "(.*?)";')
+    begin_cost = p_begin_cost.search(rsp).group(1)
+    begin_cost_section_id = eval(begin_cost)  # 锁章章节号
+
+    before_cost_num = df.loc[df["list_order"]==begin_cost_section_id-1, "chapter_read_num"].iloc[0]
+    begin_cost_num = df.loc[df["list_order"]==begin_cost_section_id, "chapter_read_num"].iloc[0]
+    try:
+        zhuanhua = round(begin_cost_num / before_cost_num, 2)
+    except:
+        zhuanhua = 0.00
+
+    df_readers_num = df[["list_order", "chapter_read_num"]].copy()
+    df_readers_num = df_readers_num.rename(columns={"list_order": "章节序号", "chapter_read_num": "阅读人数"})
+
+    df_readers_num["是否免费"] = df_readers_num["章节序号"].apply(lambda x: 1 if x < begin_cost_section_id else 0)
+    df_readers_num["章节流失阅读人数"] = df_readers_num["阅读人数"] - df_readers_num["阅读人数"].shift(1)
+    df_readers_num["章节流失阅读人数"] = df_readers_num["章节流失阅读人数"].fillna(0).astype("int")
+    df_readers_num["章节流失率"] = df_readers_num["章节流失阅读人数"] / df_readers_num["阅读人数"].shift(1)
+    df_readers_num["章节流失率"] = df_readers_num["章节流失率"].fillna(0)
+    df_readers_num["锁章章节号"] = begin_cost_section_id
+    df_readers_num["锁章转化率"] = zhuanhua
+    # 章节序号 - 阅读人数 - 是否免费 - 章节流失阅读人数 - 章节流失率 - 锁章章节号 - 锁章转化率
+    # 最多返回200章节
+    return df_readers_num
+
 def book_retention_new(cookie: str, book_id: int, start: str, end: str) -> pd.DataFrame:
     # 获取书籍留存数据，返回DataFrame
     api = f"https://manage.hinw2a.com/BookRetention/bookDetail"
