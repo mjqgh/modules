@@ -1,4 +1,5 @@
 import requests
+import pandas as pd
 
 
 def pn_book_info(cookie, pn_id):
