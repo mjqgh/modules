@@ -86,3 +86,18 @@ def book_chapter_data(cookie, pn_id, start, end):
     df_readers_num["锁章转化率"] = zhuanhua
 
     return df_readers_num
+
+def adbook_roi(cookie, pn_id, start, end):
+    # 获取投放书籍的ROI回收数据，周期总回款率
+    api = f"http://aikan-admin.thnovel.com/AdCampaign/adRoiCollectList?page=1&limit=10&is_new_user=-1&create_user=&campaign_name={pn_id}&ad_platform=&platform=&lang=en&create_time={start}%20~%20{end}"
+    headers = {
+        "Cookie": cookie,
+        "X-Requested-With": "XMLHttpRequest"
+    }
+    j_rsp = requests.get(api, headers=headers).json()
+    dict_info = j_rsp_data = j_rsp['data']['items'][0]
+    total_ad_fee = dict_info['total_ad_fee']
+    total_pay_amount = dict_info['total_pay_amount']
+    roi = total_pay_amount / total_ad_fee if total_ad_fee != 0 else None
+
+    return [total_ad_fee, total_pay_amount, roi]
