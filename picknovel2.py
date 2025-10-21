@@ -60,6 +60,7 @@ def book_chapter_data(cookie, pn_id, start, end):
         df = pd.concat([df, df2], ignore_index=True)
 
     df.sort_values("chapter_order", ascending=True, inplace=True)
+    df = df.drop_duplicates(subset=["chapter_order"], keep='first', inplace=False)
 
     df["user_read_num"] = df["user_read_num"].astype(int)
     df["user_unlock_num"] = df["user_unlock_num"].astype(int)
