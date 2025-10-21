@@ -18,7 +18,7 @@ def pn_book_info(cookie, pn_id):
 
 def book_chapter_data(cookie, pn_id, start, end):
     # 获取小说章节阅读数据
-    def pn_book_info(cookie, pn_id):
+    def pn_book_kadian(cookie, pn_id):
         # 获取pn小说的书籍信息
         url = f"http://aikan-admin.thnovel.com/Book/getList?page=1&limit=20&book_source=-1&keyword={pn_id}&status=-1&h_status=-1&sign_type=-1&cost_type=-1&cate_id=-1&is_tweet=-1&type=&update_date=&lang=en"
         headers = {
@@ -67,7 +67,7 @@ def book_chapter_data(cookie, pn_id, start, end):
     df["real_user_read_num"] = df["user_unlock_num"]
     df.loc[df["real_user_read_num"] == 0, "real_user_read_num"] = df.loc[df["real_user_read_num"] == 0, "user_read_num"]
 
-    begin_cost_section_id = pn_book_info(cookie=cookie, pn_id=pn_id)["init_charge_section"]  # 获取锁章章节号
+    begin_cost_section_id = pn_book_kadian(cookie=cookie, pn_id=pn_id)["init_charge_section"]  # 获取锁章章节号
     df["if_free"] = df["chapter_order"].apply(lambda x: 1 if x < begin_cost_section_id else 0)
 
     df_readers_num = df[["chapter_order", "real_user_read_num", "if_free"]].copy()
