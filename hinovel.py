@@ -612,13 +612,39 @@ def book_retention_new(cookie: str, book_id: int, start: str, end: str) -> pd.Da
 
     df[["stay_rate", "follow_rate"]] = df[["stay_rate", "follow_rate"]].applymap(lambda x: float(re.sub(r"<span class='color_green'>(.*?)%</span>", r"\1", str(x))) if isinstance(x, str) else x)
     df["num_day_stay"] = df["list_order"] - 1
-    df["current_chapter_users_total"] = df["current_chapter_users_total"].astype("int")
+    df["current_chapter_users_total"] = df["current_chapter_users_total"].astype(int)
 
-    # list_order
-    # current_chapter_users_total # 各章阅读人数
-    # until_chapter_users_total	
-    # stay_retention_users
-    # stay_rate
-    # follow_rate
-    # num_day_stay
-    return df
+    def get_kadian(cookie: str, hi_id) -> int:
+        # 获取小说的付费章节号
+        today_str = time.strftime("%Y-%m-%d", time.localtime())
+    
+        api = f"https://manage.hinw2a.com/BookRetention/bookDetail?book_id={hi_id}&date={today_str}%20-%20{today_str}&user_type=0"
+        headers = {
+            "Cookie": cookie
+        }
+        rsp = requests.get(api, headers=headers).text
+        kadian = int(re.compile("付费章节: ?(\d+)").search(rsp).group(1))
+        return kadian
+
+    begin_cost_section_id = get_kadian(cookie, book_id)
+
+    before_cost_num = df.loc[df["list_order"]==begin_cost_section_id-1, "current_chapter_users_total"].iloc[0]
+    begin_cost_num = df.loc[df["list_order"]==begin_cost_section_id, "current_chapter_users_total"].iloc[0]
+    
+    try:
+        zhuanhua = round(begin_cost_num / before_cost_num, 2)
+    except:
+        zhuanhua = 0.00
+    
+    df_readers_num = df[['list_order', 'current_chapter_users_total']].copy()
+    df_readers_num.rename(columns={'list_order':'章节序号', 'current_chapter_users_total':'阅读人数'}, inplace=True)
+    
+    df_readers_num["是否免费"] = df_readers_num["章节序号"].apply(lambda x: 1 if x < begin_cost_section_id else 0)
+    df_readers_num["章节流失阅读人数"] = df_readers_num["阅读人数"] - df_readers_num["阅读人数"].shift(1)
+    df_readers_num["章节流失阅读人数"] = df_readers_num["章节流失阅读人数"].fillna(0).astype("int")
+    df_readers_num["章节流失率"] = df_readers_num["章节流失阅读人数"] / df_readers_num["阅读人数"].shift(1)
+    df_readers_num["章节流失率"] = df_readers_num["章节流失率"].fillna(0)
+    df_readers_num["锁章章节号"] = begin_cost_section_id
+    df_readers_num["锁章转化率"] = zhuanhua
+    # 章节序号 - 阅读人数 - 是否免费 - 章节流失阅读人数 - 章节流失率 - 锁章章节号 - 锁章转化率
+    return df_readers_num
