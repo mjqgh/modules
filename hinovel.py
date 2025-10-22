@@ -612,6 +612,7 @@ def book_retention_new(cookie: str, book_id: int, start: str, end: str) -> pd.Da
 
     df[["stay_rate", "follow_rate"]] = df[["stay_rate", "follow_rate"]].applymap(lambda x: float(re.sub(r"<span class='color_green'>(.*?)%</span>", r"\1", str(x))) if isinstance(x, str) else x)
     df["num_day_stay"] = df["list_order"] - 1
+    df["current_chapter_users_total"] = df["current_chapter_users_total"].astype(int)
 
     # list_order
     # current_chapter_users_total # 各章阅读人数
