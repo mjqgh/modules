@@ -87,7 +87,7 @@ def book_chapter_data(cookie, pn_id, start, end):
 
     return df_readers_num
 
-def adbook_roi(cookie, pn_id, start, end):
+def adbook_roi(cookie, hn_id, start, end):
     # 获取投放书籍的ROI回收数据，周期总回款率
     api = f"http://aikan-admin.thnovel.com/AdCampaign/adRoiCollectList?page=1&limit=10&is_new_user=-1&create_user=&campaign_name={pn_id}&ad_platform=&platform=&lang=en&create_time={start}%20~%20{end}"
     headers = {
