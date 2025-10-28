@@ -581,6 +581,18 @@ def book_retention_old(cookie: str, book_id: int, start: str, end: str) -> pd.Da
     # 最多返回200章节
     return df_readers_num
 
+def get_hi_kadian(cookie: str, hi_id) -> int:
+    # 获取小说的付费章节号
+    today_str = time.strftime("%Y-%m-%d", time.localtime())
+
+    api = f"https://manage.hinw2a.com/BookRetention/bookDetail?book_id={hi_id}&date={today_str}%20-%20{today_str}&user_type=0"
+    headers = {
+        "Cookie": cookie
+    }
+    rsp = requests.get(api, headers=headers).text
+    kadian = int(re.compile("付费章节: ?(\d+)").search(rsp).group(1))
+    return kadian
+
 def book_retention_new(cookie: str, book_id: int, start: str, end: str) -> pd.DataFrame:
     # 获取书籍留存数据，返回DataFrame
     api = f"https://manage.hinw2a.com/BookRetention/bookDetail"
