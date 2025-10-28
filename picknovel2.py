@@ -87,20 +87,54 @@ def book_chapter_data(cookie, pn_id, start, end):
 
     return df_readers_num
 
-def adbook_roi(cookie, hn_id, start, end):
-    # 获取投放书籍的ROI回收数据，周期总回款率
-    api = f"http://aikan-admin.thnovel.com/AdCampaign/adRoiCollectList?page=1&limit=10&is_new_user=-1&create_user=&campaign_name={pn_id}&ad_platform=&platform=&lang=en&create_time={start}%20~%20{end}"
+def adbook_roi_newuser(cookie, bookid, start, end):
+    """
+    获取单本书广告投放回款数据（新用户首次）
+    :param cookie: str, 登录cookie
+    :param bookid: str, Hinovel小说ID
+    :param start: str, 开始日期，格式'YYYY-MM-DD'
+    :param end: str, 结束日期，格式'YYYY-MM-DD'
+    :return: list, [广告费, 首回-30日有效, 总回款-30日有效, 总ROI-30日有效, 首日ROI-30日有效]
+    """
+    api = "http://aikan-admin.thnovel.com/AdCampaign/adRoiCollectList"
+
+    params = {
+        "page": "1",
+        "limit": "100",
+        "is_new_user": "-1",
+        "create_user": "",
+        "campaign_name": f"{bookid}",
+        "ad_platform": "",
+        "platform": "",
+        "lang": "en",
+        "create_time": f"{start} ~ {end}",
+        "book_type": "",
+        "book_id": "",
+    }
+
     headers = {
         "Cookie": cookie,
         "X-Requested-With": "XMLHttpRequest"
     }
-    j_rsp = requests.get(api, headers=headers).json()
-    dict_info = j_rsp_data = j_rsp['data']['items'][0]
-    total_ad_fee = dict_info['total_ad_fee']
-    total_pay_amount = dict_info['total_pay_amount']
-    roi = total_pay_amount / total_ad_fee if total_ad_fee != 0 else None
 
-    return [total_ad_fee, total_pay_amount, roi]
+    response = requests.get(api, params=params, headers=headers)
+    j_rsp = response.json()
+
+    dict_info = j_rsp_data = j_rsp['data']['items'][0]
+    total_ad_fee = dict_info['total_ad_fee']  # 广告费
+    first_pay_amount = dict_info['first_pay_amount']  # 首回
+    total_pay_amount = dict_info['total_pay_amount']  # 总回款
+    roi_total = total_pay_amount / total_ad_fee if total_ad_fee != 0 else None
+    roi_first = first_pay_amount / total_ad_fee if total_ad_fee != 0 else None
+
+    dict_return = {
+        "广告费": total_ad_fee,
+        "首回-新用户首次": first_pay_amount,
+        "总回款-新用户首次": total_pay_amount,
+        "总ROI-新用户首次": roi_total,
+        "首日ROI-新用户首次": roi_first
+    }
+    return dict_return
 
 def adbook_roi_30d(cookie, bookid, start, end):
     """
@@ -149,5 +183,4 @@ def adbook_roi_30d(cookie, bookid, start, end):
         "总ROI-30日有效": roi_total,
         "首日ROI-30日有效": roi_first
     }
-
     return dict_return
