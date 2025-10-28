@@ -115,7 +115,7 @@ def adbook_roi_30d(cookie, bookid, start, end):
 
     params = {
         "page": "1",
-        "limit": "10",
+        "limit": "100",
         "is_new_user": "-1",
         "create_user": "",
         "campaign_name": f"{bookid}",
