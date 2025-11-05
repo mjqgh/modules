@@ -2,6 +2,28 @@ import requests
 import pandas as pd
 
 
+def hnid_search_pnid(cookie, hn_id):
+    # 用hinovel的id获取picknovel的id
+    api = f"http://aikan-admin.thnovel.com/Book/searchOption?keyword={hn_id}&lang=en&type=1"
+    headers = {"Cookie": cookie, "X-Requested-With": "XMLHttpRequest"}
+    rsp = requests.get(url=api, headers=headers).json()
+    list_items = rsp["data"]
+    if len(list_items) == 0:
+        pn_id = 0
+        return pn_id
+    
+    try:
+        for items in list_items:
+            book_id = items["book_id"]
+            if book_id == hn_id:
+                pn_id = items["id"]
+                return pn_id
+        pn_id = 0
+    except:
+        pn_id = 0    
+
+    return pn_id
+
 def pn_book_info(cookie, pn_id):
     # 获取pn小说的书籍信息
     url = f"http://aikan-admin.thnovel.com/Book/getList?page=1&limit=20&book_source=-1&keyword={pn_id}&status=-1&h_status=-1&sign_type=-1&cost_type=-1&cate_id=-1&is_tweet=-1&type=&update_date=&lang=en"
