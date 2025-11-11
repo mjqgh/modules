@@ -33,6 +33,30 @@ def pn_book_tongji(cookie, start_date, end_date):
 
     return df_total
 
+def pn_book_ad_spend(cookie, start_date, end_date):
+    # 小说广告投放金额表
+    def book_ad_spend(cookie, start_date, end_date, page_num):
+        api = f"http://aikan-admin.thnovel.com/DataStat/getDailyRecycling?page={page_num}&limit=100&lang=en&keyword=&advertiser=&platform=-1&create_time={start_date}%20~%20{end_date}"
+        headers = {
+            "Cookie": cookie,
+            "X-Requested-With": "XMLHttpRequest"
+        }
+        rsp = requests.get(url=api, headers=headers).json()
+        return rsp
+
+    total = book_ad_spend(cookie=cookie, start_date=start_date, end_date=end_date, page_num=1)["data"]["paging_data"]["total"]
+    total_page_num = (total + 99) // 100  # 整数向上取整（不需额外导入）
+
+    df_total = pd.DataFrame()
+    for page_num in range(1, total_page_num+1):
+        # print(page_num)
+        list_items = book_ad_spend(cookie=cookie, start_date=start_date, end_date=end_date, page_num=page_num)["data"]["items"]
+        df_items = pd.DataFrame(list_items)
+        df_total = pd.concat([df_total, df_items])
+    # book_id 为 hinovel书籍ID
+    # ad_amount 为 广告花费
+    return df_total
+
 def hnid_search_pnid(cookie, hn_id):
     # 用hinovel的id获取picknovel的id
     api = f"http://aikan-admin.thnovel.com/Book/searchOption?keyword={hn_id}&lang=en&type=1"
