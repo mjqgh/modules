@@ -4,11 +4,120 @@ import json
 import math
 import time
 import re
+from lxml import etree
 
 
 host_ip = "8.219.67.223"
 host_domain = "manage.hinw2a.com"
 
+def change_begin_cost(cookie, hn_id, begin_cost):
+    # 更改翻译书卡点锁章
+    api = f"https://manage.hinw2a.com/stat.book/edit/book_id/{hn_id}/channel_type/1"
+    headers = {"Cookie": cookie}
+    rsp = requests.get(url=api, headers=headers).text
+    html = etree.HTML(rsp)
+
+    begin_cost = begin_cost  # 起点收费章节，需要设置
+
+    rate = html.xpath('//input[@name="rate"]/@value')[0]  # rate 
+    divide_proportions = html.xpath('//input[@name="divide_proportions"]/@value')[0]  # 分成比例 
+    length_type = html.xpath('//input[@name="length_type"]/@value')[0]
+    other_name = html.xpath('//input[@name="other_name"]/@value')[0]  # 书籍别名
+    book_name = html.xpath('//input[@name="book_name"]/@value')[0]  # 书籍名称
+    writer_name = html.xpath('//input[@name="writer_name"]/@value')[0]  # 作者名称
+    comment_avg_score = html.xpath('//input[@name="comment_avg_score"]/@value')[0]  # 书籍评分
+    file = "no"
+    book_pic = html.xpath('//input[@name="book_pic"]/@value')[0]  # 书籍封面
+    book_pic_oss = html.xpath('//input[@name="book_pic_oss"]/@value')[0]  # 书籍封面oss地址
+    book_water_pic = html.xpath('//input[@name="book_water_pic"]/@value')[0]  # 书籍水印封面
+    author_id = html.xpath('//input[@name="author_id"]/@value')[0]  # 作者ID
+    try:
+        book_desc = html.xpath('//textarea[@name="book_desc"]/text()')[0]  # 书籍简介
+    except:
+        book_desc = ""
+    preference = html.xpath('//input[@name="preference"][@checked]/@value')[0]  # 书籍偏好类型
+    category_id = html.xpath('//select[@name="category_id"]/option[@selected]/@value')[0]  # 书籍分类
+
+    money = html.xpath('//input[@name="money"]/@value')[0]  # 千字单价
+    status = html.xpath('//input[@name="status"][@checked]/@value')[0]  # 上架状态
+    update_status = html.xpath('//input[@name="update_status"][@checked]/@value')[0]  # 连载状态
+
+    str_labels = re.compile(r"setValue\(\[(.*?)\]").search(rsp).group(1)
+    str_list_labels = "[" + str_labels + "]"
+    list_labels = eval(str_list_labels)  # 书籍标签
+
+    str_label_value = ""
+    for i in list_labels:
+        label_value = i['value']
+        str_label_value += str(label_value) + ","
+    str_label_value = str_label_value[:-1]  # 去掉最后一个逗号
+
+    is_free = html.xpath('//input[@name="is_free"][@checked]/@value')[0]  # 是否免费
+    is_ad_unlock = html.xpath('//input[@name="is_ad_unlock"][@checked]/@value')[0]  # 是否广告解锁
+    book_source = html.xpath('//input[@name="book_source"][@checked]/@value')[0]  # 书籍来源
+    section_num = html.xpath('//input[@name="section_num"]/@value')[0]  # 章节数
+    try:
+        remark = html.xpath('//textarea[@name="remark"]/text()')[0]  # 备注
+    except:
+        remark = ""
+    shareable = html.xpath('//input[@name="shareable"][@checked]/@value')[0]  # 是否允许分享
+    recommend = html.xpath('//input[@name="recommend"][@checked]/@value')[0]  # 推荐状态
+    add_types = "0"
+    advances = html.xpath('//input[@name="advances"]/@value')[0]  # 是否预收
+    surplus_advance_charge = html.xpath('//input[@name="surplus_advance_charge"]/@value')[0]  # 预收剩余可收费章节数
+    advance_charge = html.xpath('//input[@name="advance_charge"]/@value')[0]  # 预收已收费章节数
+    content_grade = html.xpath('//input[@name="content_grade"][@checked]/@value')[0]  # 内容分级
+    adult_content_level = html.xpath('//input[@name="adult_content_level"][@checked]/@value')[0]  # 成人内容等级
+    able_unlock_for_bean = html.xpath('//input[@name="able_unlock_for_bean"][@checked]/@value')[0]  # 是否允许豆解锁
+    adult_chapter_begin = html.xpath('//input[@name="adult_chapter_begin"]/@value')[0]  # 成人章节开始章节数
+    del_relation_copyright_platform = "0"  # 删除关联版权平台
+    book_id = html.xpath('//input[@name="book_id"]/@value')[0]  # 书籍ID
+
+    data = {
+        "rate": rate,
+        "divide_proportions": divide_proportions,
+        "length_type": length_type,
+        "other_name": other_name,
+        "book_name": book_name,
+        "writer_name": writer_name,
+        "comment_avg_score": comment_avg_score,
+        "money": money,
+        "begin_cost": begin_cost,
+        "status": status,
+        "file": file,
+        "book_pic": book_pic,
+        "book_pic_oss": book_pic_oss,
+        "book_water_pic": book_water_pic,
+        "author_id": author_id,
+        "book_desc": book_desc,
+        "preference": preference,
+        "category_id": category_id,
+        "labels": str_label_value,
+        "is_free": is_free,
+        "is_ad_unlock": is_ad_unlock,
+        "update_status": update_status,
+        "book_source": book_source,
+        "section_num": section_num,
+        "remark": remark,
+        "shareable": shareable,
+        "recommend": recommend,
+        "add_types": add_types,
+        "advances": advances,
+        "surplus_advance_charge": surplus_advance_charge,
+        "advance_charge": advance_charge,
+        "content_grade": content_grade,
+        "adult_content_level": adult_content_level,
+        "able_unlock_for_bean": able_unlock_for_bean,
+        "adult_chapter_begin": adult_chapter_begin,
+        "del_relation_copyright_platform": del_relation_copyright_platform,
+        "book_id": book_id
+    }
+    # 提交保存书籍信息
+    api_save_bookinfo = "https://manage.hinw2a.com/stat.book/ajaxEdit"
+    rsp_save = requests.post(url=api_save_bookinfo, headers=headers, data=data).text
+
+    # print(data)
+    return rsp_save
 
 def read_user_num(lang, token, start_date, end_date):  # 每日阅读人数
     """
