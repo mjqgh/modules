@@ -33,7 +33,7 @@ def h5_edit_book_status(h5_id, status=1):
     dict_cookies = requests.get(url_cookie).json()
     cookie_h5 = dict_cookies["h5"]
     
-    edit_api = "http://master-admin.thnovel.com/Book/editBatchStatus"
+    edit_api = "https://master-admin.thnovel.com/Book/editBatchStatus"
     post_data = {
         "lang": "en",
         "status": status,  # 默认上架
