@@ -9,9 +9,7 @@ cookie_h5 = dict_cookies["h5"]
 
 def h5_book_info(hn_id):
     # 用hinovel的小说id获取h5的小说信息，主要是h5的小说id以及卡点
-    url_cookie = "https://raw.githubusercontent.com/mjqgh/modules/refs/heads/main/cookies.json"  # 从在线json中获取cookie
-    dict_cookies = requests.get(url_cookie).json()
-    cookie_h5 = dict_cookies["h5"]
+    global cookie_h5
 
     api = f"https://master-admin.thnovel.com/Book/getList?page=1&limit=100&book_source=-1&keyword={hn_id}&status=-1&h_status=-1&sign_type=-1&cost_type=-1&cate_id=-1&is_tweet=-1&update_date=&lang=en"
     headers = {
@@ -29,9 +27,6 @@ def h5_edit_book_status(h5_id, status=1):
     # 批量审核小说上架/下架
     # status=1为上架、2为下架、3为软下架，默认为1
     global cookie_h5
-    # url_cookie = "https://raw.githubusercontent.com/mjqgh/modules/refs/heads/main/cookies.json"  # 从在线json中获取cookie
-    # dict_cookies = requests.get(url_cookie).json()
-    # cookie_h5 = dict_cookies["h5"]
     
     edit_api = "https://master-admin.thnovel.com/Book/editBatchStatus"
     post_data = {
@@ -51,10 +46,7 @@ def h5_edit_book_price(h5_id, kadian, price_type=1, price=40):
     # 批量小说改价/改卡点
     # price_type：0=免费 1=千字 2=章节 (填充对应数字)
     # price：千字单价
-
-    url_cookie = "https://raw.githubusercontent.com/mjqgh/modules/refs/heads/main/cookies.json"  # 从在线json中获取cookie
-    dict_cookies = requests.get(url_cookie).json()
-    cookie_h5 = dict_cookies["h5"]
+    global cookie_h5
     
     edit_api = "https://master-admin.thnovel.com/Book/editBatchPrice"
     post_data = {
