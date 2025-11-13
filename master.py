@@ -44,7 +44,7 @@ def h5_edit_book_price(h5_id, kadian, price_type=1, price=40):
     edit_api = "https://master-admin.thnovel.com/Book/editBatchPrice"
     post_data = {
         "lang": "en",
-        "product_list": json.dumps([{"productId":f"{pid}","priceType":f"{price_type}","price":f"{price}","initiationChapter":f"{kadian}"}])
+        "product_list": json.dumps([{"productId":f"{h5_id}","priceType":f"{price_type}","price":f"{price}","initiationChapter":f"{kadian}"}])
     }
     headers = {
         "Cookie": cookie_h5,
