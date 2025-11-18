@@ -90,7 +90,8 @@ def pn_book_info(cookie, pn_id):
     # if rsp["data"]["total"] == 0:
     #     return None
     dict_rsp = rsp["data"]["items"][0]
-    # init_charge_section 卡点锁章
+    # init_charge_section：卡点锁章
+    # type：1为长篇，2为短篇
     return dict_rsp
 
 def book_chapter_data(cookie, pn_id, start, end):
