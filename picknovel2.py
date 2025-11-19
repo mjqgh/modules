@@ -2,6 +2,10 @@ import requests
 import pandas as pd
 
 
+url_cookie = "https://raw.githubusercontent.com/mjqgh/modules/refs/heads/main/cookies.json"  # 从在线json中获取cookie
+dict_cookies = requests.get(url_cookie).json()
+cookie_pn = dict_cookies["pn"]
+
 def pn_book_tongji(cookie, start_date, end_date):
     # 小说统计表
     def book_tongji(cookie, start_date, end_date, page_num):
@@ -57,8 +61,10 @@ def pn_book_ad_spend(cookie, start_date, end_date):
     # ad_amount 为 广告花费
     return df_total
 
-def hnid_search_pnid(cookie, hn_id):
+def hnid_search_pnid(hn_id, cookie=None):
     # 用hinovel的id获取picknovel的id
+    global cookie_pn
+    cookie = cookie_pn
     api = f"http://aikan-admin.thnovel.com/Book/searchOption?keyword={hn_id}&lang=en&type=1"
     headers = {"Cookie": cookie, "X-Requested-With": "XMLHttpRequest"}
     rsp = requests.get(url=api, headers=headers).json()
