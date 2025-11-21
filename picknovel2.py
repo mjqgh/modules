@@ -6,8 +6,12 @@ url_cookie = "https://raw.githubusercontent.com/mjqgh/modules/refs/heads/main/co
 dict_cookies = requests.get(url_cookie).json()
 cookie_pn = dict_cookies["pn"]
 
-def pn_book_tongji(cookie, start_date, end_date):
+def pn_book_tongji(start_date, end_date, cookie=None):
     # 小说统计表
+    global cookie_pn
+    if cookie==None:
+        cookie=cookie_pn
+        
     def book_tongji(cookie, start_date, end_date, page_num):
         api = "http://aikan-admin.thnovel.com/BookStat/bookDayFullStat"
         post_data = {
