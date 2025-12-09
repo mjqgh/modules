@@ -10,6 +10,23 @@ from lxml import etree
 host_ip = "8.219.67.223"
 host_domain = "manage.hinw2a.com"
 
+j_cookies = requests.get("https://raw.githubusercontent.com/mjqgh/modules/refs/heads/main/cookies.json").json()
+cookie_hn = j_cookies["hn"] 
+
+def hn_book_info(hn_id):
+    # 获取pn小说的书籍信息
+    url = f"https://manage.hinw2a.com/stat.book/ajaxList?book_id={hn_id}"
+    headers = {
+        "Cookie": cookie_hn
+    }
+    rsp = requests.get(url, headers=headers).json()
+    # if rsp["data"]["total"] == 0:
+    #     return None
+    dict_rsp = rsp["data"][0]
+    # begin_cost：卡点锁章
+    # book_info：书籍信息
+    return dict_rsp
+
 def change_begin_cost(cookie, hn_id, begin_cost):
     # 更改翻译书卡点锁章
     api = f"https://manage.hinw2a.com/stat.book/edit/book_id/{hn_id}/channel_type/1"
