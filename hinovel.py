@@ -14,7 +14,7 @@ j_cookies = requests.get("https://raw.githubusercontent.com/mjqgh/modules/refs/h
 cookie_hn = j_cookies["hn"] 
 
 def hn_book_info(hn_id):
-    # 获取pn小说的书籍信息
+    # 获取hn小说的书籍信息
     url = f"https://manage.hinw2a.com/stat.book/ajaxList?book_id={hn_id}"
     headers = {
         "Cookie": cookie_hn
