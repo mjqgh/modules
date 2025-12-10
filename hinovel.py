@@ -17,7 +17,7 @@ cookie_hn = j_cookies["hn"]
 def each_day_adspend(start_date, end_date, access_token):
     # 广告后台【每日消耗】
     base_url = "https://ads.hinw2a.com/api/datamanage/list.json"
-    post_data = {date_ranges: f"{start_date}_{end_date}"}
+    post_data = {"date_ranges": f"{start_date}_{end_date}"}
 
     headers = {
         "X-ads-aid": "hinovel",
