@@ -678,7 +678,7 @@ def book_analysis(start_date, end_date, access_token, book_id=""):
         "X-ads-aid": "hinovel",
         "X-ads-ip": "8.219.67.223",
         "X-ads-timestamp": f"{int(time.time())}",
-        "Authorization": f"Bearer {access_token}",
+        "Authorization": access_token",
     }
     rsp = session.get(url=base_url, params=params, headers=headers).json()
     df = pd.DataFrame(rsp['data']['list'])
