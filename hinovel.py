@@ -13,6 +13,22 @@ host_domain = "manage.hinw2a.com"
 j_cookies = requests.get("https://raw.githubusercontent.com/mjqgh/modules/refs/heads/main/cookies.json").json()
 cookie_hn = j_cookies["hn"] 
 
+
+def each_day_adspend(start_date, end_date, access_token):
+    # 广告后台【每日消耗】
+    base_url = "https://ads.hinw2a.com/api/datamanage/list.json"
+    post_data = {date_ranges: f"{start_date}_{end_date}"}
+
+    headers = {
+        "X-ads-aid": "hinovel",
+        "X-ads-ip": "8.219.67.223",
+        "X-ads-timestamp": f"{int(time.time())}",
+        "Authorization": f"Bearer {access_token}",
+    }
+    rsp = requests.post(url=base_url, data=post_data, headers=headers).json()
+    df = pd.DataFrame(rsp['data'])
+    return df
+
 def hn_book_info(hn_id):
     # 获取hn小说的书籍信息
     url = f"https://manage.hinw2a.com/stat.book/ajaxList?book_id={hn_id}"
