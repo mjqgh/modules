@@ -35,7 +35,11 @@ def check_comment_risk(comment_text):
                                 full_content += content  # 同时存储
                         except json.JSONDecodeError:
                             pass
-    
     response.close()  # 记得关闭连接 [7,8](@ref)
     
-    return full_content
+    if "建议通过" in result:
+        sugg = "通过审核"
+    elif "建议不通过" in result:
+        sugg = "不通过审核"
+        
+    return [sugg, full_content]
