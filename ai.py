@@ -37,9 +37,9 @@ def check_comment_risk(comment_text):
                             pass
     response.close()  # 记得关闭连接 [7,8](@ref)
     
-    if "建议通过" in result:
+    if "建议通过" in full_content:
         sugg = "通过审核"
-    elif "建议不通过" in result:
+    elif "建议不通过" in full_content:
         sugg = "不通过审核"
         
     return [sugg, full_content]
