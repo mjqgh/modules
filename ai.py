@@ -31,7 +31,7 @@ def check_comment_risk(comment_text):
                             json_data = json.loads(data_str)
                             if 'content' in json_data:
                                 content = json_data['content']
-                                print(content, end='', flush=True)  # 实时显示
+                                # print(content, end='', flush=True)  # 实时显示
                                 full_content += content  # 同时存储
                         except json.JSONDecodeError:
                             pass
