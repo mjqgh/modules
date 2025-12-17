@@ -11,7 +11,7 @@ def check_comment_risk(comment_text):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36"
     }
 
-    post_data = {"conversationId":"","content":f"“{comment_text}” 这句英文评论有风险吗？能通过审核吗？我希望评论是评价、建议和讨论小说内容（比如角色、情节、语法、写法、催更等相关内容），特别是讨论关于APP付费相关的一律不通过，最后你需要回复我“建议通过”或者“建议不通过”，以及审核结论的原因","thinkingEnable":False,"onlineEnable":False,"modelId":9,"textFile":[],"imageFile":[],"clusterId":""}
+    post_data = {"conversationId":"","content":f"“{comment_text}” 这句英文评论有风险吗？能通过审核吗？我希望评论是评价、建议和讨论小说内容（比如角色、情节、语法、写法、催更等相关内容），特别是讨论关于APP付费相关的一律不通过，另外我的APP是海外平台允许“性”相关话题，最后你需要回复我“建议通过”或者“建议不通过”，以及审核结论的原因","thinkingEnable":False,"onlineEnable":False,"modelId":9,"textFile":[],"imageFile":[],"clusterId":""}
 
     response = requests.post(api, headers=headers, json=post_data, stream=True)
     # print(response)
