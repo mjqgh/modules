@@ -18,7 +18,7 @@ def check_comment_risk(comment_text):
     最后，你需要回复我“建议通过”或者“建议不通过”，以及审核结论的原因。
     """
     
-    post_data = {"conversationId":"","content":f"{content_send}","thinkingEnable":False,"onlineEnable":False,"modelId":9,"textFile":[],"imageFile":[],"clusterId":""}
+    post_data = {"conversationId":"","content":f"{content_send}","thinkingEnable":False,"onlineEnable":False,"modelId":120,"textFile":[],"imageFile":[],"clusterId":""}  # modelId:120 为专家模型；9为普通通用模型
 
     response = requests.post(api, headers=headers, json=post_data, stream=True)
     # print(response)
