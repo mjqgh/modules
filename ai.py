@@ -43,6 +43,8 @@ def check_comment_risk(comment_text):
                         except json.JSONDecodeError:
                             pass
     response.close()  # 记得关闭连接 [7,8](@ref)
+
+    full_content = full_content.replace("[done]", "")
     
     if "建议通过" in full_content:
         sugg = "通过审核"
