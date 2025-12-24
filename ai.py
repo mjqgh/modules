@@ -53,5 +53,7 @@ def check_comment_risk(comment_text):
         sugg = "通过审核"
     elif "建议不通过" in full_content:
         sugg = "不通过审核"
+    else:
+        sugg = "不确定"
         
     return [sugg, full_content]
