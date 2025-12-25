@@ -14,11 +14,13 @@ def check_comment_risk(comment_text):
     content_send = f"""
     “{comment_text}” 请问这句英文评论有风险吗？能通过审核吗？
     我是海外小说APP的评论审核人员，我的审核标准如下：
-    1.我希望评论是评价、建议和讨论小说内容（比如角色、情节、语法、写法、催更、读后感等相关内容）。
+    1.我希望评论是评价、建议和讨论小说内容（比如角色、情节、语法、写法、读后感等相关内容）。
     2.不允许讨论关于APP付费相关的内容。
-    3.需要过滤掉对于小说结局的直接差评和纠错评论，避免竞品的恶意差评影响新读者的阅读。
-    4.我的APP是海外平台，允许讨论“性相关”话题（当然不能有太露骨性的用词）。
-    最后，你需要回复我“建议通过”或者“建议不通过”，以及审核结论的原因。
+    3.需要过滤掉对于小说结局的直接差评，避免竞品的恶意差评影响新读者的阅读。
+    4.属于纠错的评论一律不通过审核，APP会自动同步给作者的，无需通过审核。
+    5.我的APP是海外平台，允许讨论“性相关”话题（当然不能有太露骨性的用词）。
+    6.允许表达对更多内容的期待或鼓励性催更，但禁止抱怨更新缓慢或变相讽刺作品未完结的言论。
+    最后，如果建议通过，回复我暗号“通过666”；如果建议不通过，回复我暗号“拒绝886”；此外，还要回复审核结论的原因。
     """
     
     post_data = {"conversationId":"","content":f"{content_send}","thinkingEnable":False,"onlineEnable":False,"modelId":120,"textFile":[],"imageFile":[],"clusterId":""}  # modelId:120 为专家模型；9为普通通用模型
@@ -49,9 +51,9 @@ def check_comment_risk(comment_text):
 
     full_content = full_content.replace("[done]", "")
     
-    if "建议通过" in full_content:
+    if "通过666" in full_content:
         sugg = "通过审核"
-    elif "建议不通过" in full_content:
+    elif "拒绝886" in full_content:
         sugg = "不通过审核"
     else:
         sugg = "不确定"
