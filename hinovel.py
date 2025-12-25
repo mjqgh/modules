@@ -5,7 +5,6 @@ import math
 import time
 import re
 from lxml import etree
-from io import BytesIO
 
 
 host_ip = "8.219.67.223"
