@@ -5,6 +5,7 @@ import math
 import time
 import re
 from lxml import etree
+from io import BytesIO
 
 
 host_ip = "8.219.67.223"
@@ -13,6 +14,14 @@ host_domain = "manage.hinw2a.com"
 j_cookies = requests.get("https://raw.githubusercontent.com/mjqgh/modules/refs/heads/main/cookies.json").json()
 cookie_hn = j_cookies["hn"] 
 
+
+def get_user_info(uid):
+    # 获取单个用户的用户信息列表
+    api = f"https://manage.hinw2a.com/user/exportUser?is_vip=-1&id={uid}&os_type=0&create_time=&os_uuid=&account_type=-1&last_login_ip=&email=&is_email=-1&country=&is_pay_user=-1&last_login_time=&last_pay_time=&total_pay=&status=-1&risk_status=-1&deeplink=&tag_user_crowd=-1&is_async=0"
+    headers = {"Cookie": cookie_hn}
+    rsp = requests.get(url=api, headers=headers).content
+    df_user_info = pd.read_csv(BytesIO(rsp))
+    return df_user_info
 
 def each_day_adspend(start_date, end_date, access_token):
     # 广告后台【每日消耗】
