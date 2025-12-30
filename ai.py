@@ -14,16 +14,19 @@ def check_comment_risk(comment_text):
     content_send = f"""
     “{comment_text}” 请问这句英文评论有风险吗？能通过审核吗？
     我是海外小说APP的评论审核人员，我的审核标准如下：
-    1.我希望评论是评价、建议和讨论小说内容（比如角色、情节、语法、写法、读后感等相关内容）。
-    2.不允许讨论关于APP付费相关的内容。
+    1.我希望评论是评价、建议和讨论小说内容（比如角色、情节、语法、写法、读后感、合理推测、表达喜爱的表情符号等相关内容）。
+    2.禁止支付与定价讨论：禁止任何关于APP付费、章节定价、充值方式、性价比抱怨等与交易相关的内容。
     3.需要过滤掉对于小说结局的直接差评，避免竞品的恶意差评影响新读者的阅读。
-    4.属于纠错的评论一律不通过审核，APP会自动同步给作者的，无需通过审核。
-    5.我的APP是海外平台，允许讨论“性相关”话题（当然不能有太露骨性的用词）。
+    4.有纠错的评论一律不通过审核（涉及内容重复的也属于纠错），APP会自动同步给作者确认，无需通过审核，避免影响其他读者判断。
+    5.允许讨论提及“性相关”情节或主题，但禁止露骨、直白的情色描写、挑逗性言论，或纯粹寻求色情内容的诱导性提问。
     6.允许表达对更多内容的期待或鼓励性催更，但禁止抱怨更新缓慢或变相讽刺作品未完结的言论。
+    7.禁止阅读体验与技术问题反馈：禁止发布与APP使用体验、技术故障、个人网络或设备问题相关的评论。
+    8.除了提及我们自己APP“Hinovel”，不能提及其他任何互联网产品的名字，提及就一律不通过，即使是一条好评论。
+
     最后，如果建议通过，回复我暗号“通过666”；如果建议不通过，回复我暗号“拒绝886”；此外，还要回复审核结论的原因。
     """
     
-    post_data = {"conversationId":"","content":f"{content_send}","thinkingEnable":False,"onlineEnable":False,"modelId":120,"textFile":[],"imageFile":[],"clusterId":""}  # modelId:120 为专家模型；9为普通通用模型
+    post_data = {"conversationId":"","content":f"{content_send}","thinkingEnable":False,"onlineEnable":False,"modelId":120,"textFile":[],"imageFile":[],"clusterId":""}
 
     response = requests.post(api, headers=headers, json=post_data, stream=True)
     # print(response)
@@ -48,9 +51,9 @@ def check_comment_risk(comment_text):
                         except json.JSONDecodeError:
                             pass
     response.close()  # 记得关闭连接 [7,8](@ref)
-
-    full_content = full_content.replace("[done]", "")
     
+    full_content = full_content.replace("[done]", "")
+
     if "通过666" in full_content:
         sugg = "通过审核"
     elif "拒绝886" in full_content:
