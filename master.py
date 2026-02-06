@@ -16,7 +16,7 @@ def h5_book_info(hn_id):
         "Cookie": cookie_h5,
         "X-Requested-With": "XMLHttpRequest"
     }
-    rsp = requests.get(url=api, headers=headers).json()
+    rsp = requests.get(url=api, headers=headers, verify=False).json()
     df = pd.DataFrame(rsp["data"]["items"])
     df_info = df.loc[df["book_id"]==hn_id, :].copy()
     # 卡点：init_charge_section
