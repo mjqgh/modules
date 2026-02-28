@@ -4,13 +4,13 @@ import pandas as pd
 
 url_cookie = "https://raw.githubusercontent.com/mjqgh/modules/refs/heads/main/cookies.json"  # 从在线json中获取cookie
 dict_cookies = requests.get(url_cookie).json()
-cookie_pn = dict_cookies["pn"]
+cookie_axis = dict_cookies["axis"]
 
 def pn_book_tongji(start_date, end_date, cookie=None):
     # 小说统计表
-    global cookie_pn
+    global cookie_axis
     if cookie==None:
-        cookie=cookie_pn
+        cookie=cookie_axis
         
     def book_tongji(cookie, start_date, end_date, page_num):
         api = "http://aikan-admin.thnovel.com/BookStat/bookDayFullStat"
