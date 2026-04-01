@@ -52,7 +52,7 @@ class PickNovel:
 
     def search_pn_id(self, bid):
         # 用hi的ID查询pn的小说ID，如果是待审核则改为上架，并且改价
-        # bid hi的小说ID
+        # bid: pn的内部ID
         search_api = f"http://aikan-admin.thnovel.com/Book/getList?page=1&limit=20&keyword={bid}&lang=en"
         response = requests.get(search_api, headers=self.headers).json()
         items = response['data']['items']
