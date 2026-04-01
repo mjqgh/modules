@@ -64,10 +64,10 @@ class PickNovel:
                 kadian = item["init_charge_section"]
                 book_status = item['book_status']  # 待审核/已完结
                 if (book_id == bid) and ("待审核" not in book_status):  # 找到并且不是待审核
-                    pn_id = item['id']
+                    pn_id = item['book_id']
                     break
                 elif (book_id == bid) and ("待审核" in book_status):  # 找到但是待审核
-                    pn_id = item['id']
+                    pn_id = item['book_id']
                     self.piliang_edit_book_status(pn_id)  # 批量修改小说状态
                     self.piliang_edit_book_price(pid=pn_id, kadian=kadian, price=43)  # 批量修改小说价格
                     break
