@@ -52,7 +52,7 @@ class PickNovel:
 
     def search_pn_id(self, bid):
         # 用hi的ID查询pn的小说ID，如果是待审核则改为上架，并且改价
-        # bid: pn的内部ID
+        # bid: pn的内部ID，也就是hinovel的id
         search_api = f"http://aikan-admin.thnovel.com/Book/getList?page=1&limit=20&keyword={bid}&lang=en"
         response = requests.get(search_api, headers=self.headers).json()
         items = response['data']['items']
@@ -60,14 +60,14 @@ class PickNovel:
             pn_id = 0 # 没有找到
         else:
             for item in items: # 可能有多个结果，需要匹配hi的ID
-                book_id = item['book_id']
+                book_id = item['book_id']  # 内部id，也就是hinovel的id
                 kadian = item["init_charge_section"]
                 book_status = item['book_status']  # 待审核/已完结
                 if (book_id == bid) and ("待审核" not in book_status):  # 找到并且不是待审核
-                    pn_id = item['book_id']
+                    pn_id = item['id']
                     break
                 elif (book_id == bid) and ("待审核" in book_status):  # 找到但是待审核
-                    pn_id = item['book_id']
+                    pn_id = item['id']
                     self.piliang_edit_book_status(pn_id)  # 批量修改小说状态
                     self.piliang_edit_book_price(pid=pn_id, kadian=kadian, price=43)  # 批量修改小说价格
                     break
