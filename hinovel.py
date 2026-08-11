@@ -649,7 +649,7 @@ def book_count_down(cookie, start_date, end_date):  # 书籍统计表-导出接�
     return df
 
 
-def book_analysis(start_date, end_date, access_token, book_id=""):
+def book_analysis(start_date, end_date, access_token, book_id="", lang="en"):
     # 广告后台【书籍分析】
     session = requests.Session()
 
@@ -670,7 +670,7 @@ def book_analysis(start_date, end_date, access_token, book_id=""):
     params = {
         "client_type": "",
         "ad_channel": "",
-        "lang": "en",
+        "lang": lang,
         "book_id": f"{book_id}",
         "date_ranges": f"{start_date}_{end_date}",
         "user_scope": "valid_user",
