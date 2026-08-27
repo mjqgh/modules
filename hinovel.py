@@ -5,6 +5,8 @@ import math
 import time
 import re
 from lxml import etree
+from multiprocessing.dummy import Pool  # 非常容易漏掉dummy
+import threading
 
 
 host_ip = "8.219.67.223"
@@ -522,6 +524,147 @@ def novel_list(cookie):  # 小说列表
         "千字价格",
         "可书币解锁",
         "上架时间",
+        "备注"
+    ]
+    df_copy["总消耗额"] = df_copy["总消耗额"].astype("float")
+    df_copy["充值额"] = df_copy["充值额"].astype("float")
+    df_copy["千字价格"] = df_copy["千字价格"].astype("float")
+
+    return df_copy
+
+
+def novel_list_x10(cookie):  # 小说列表（多线程版）
+    # 用multiprocessing.dummy.Pool 10个线程，锁安全
+
+    each_page_amount = 100
+    url = f"https://{host_domain}/stat.book/ajaxList"
+    params = {
+        "book_source":"-1",
+        "page":"1",
+        "limit":"10",
+        "book_id":"",
+        "platform":"-1",
+        "author_name":"",
+        "check_user_name":"",
+        "follow_name":"",
+        "status":"-1",
+        "update_status":"-1",
+        "sign_type":"0",
+        "sign_status":"-1",
+        "is_free":"-1",
+        "preference":"-1",
+        "category_id":"0",
+        "recommend":"-1",
+        "book_relation":"-1",
+        "promotion_status":"-1",
+        "date":"",#2022-01-27 - 2022-02-08
+        "recharge_date":"",
+    }
+
+    headers = {
+        "Cookie": cookie,
+        "Host": host_domain,
+        "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36",
+        "X-Requested-With":"XMLHttpRequest",
+    }
+
+    s = requests.get(url, params=params, headers=headers).text
+    dict_s = json.loads(s)
+    count_num = dict_s["count"]
+
+    # 获得总页数
+    page_num = math.ceil(count_num / each_page_amount)  # 向上取整
+
+    lock = threading.Lock()  # 线程锁，多个线程同时访问一个对象时需要使用，比如全局变量
+    #df_total = pd.DataFrame()
+    dfs = []   # 用于收集各页
+
+    def fetch_page(page):
+        each_page_amount = 100
+        params = {
+            "book_source":"-1",
+            "page":f"{page}",
+            "limit":f"{each_page_amount}",
+            "book_id":"",
+            "platform":"-1",
+            "author_name":"",
+            "check_user_name":"",
+            "follow_name":"",
+            "status":"-1",
+            "update_status":"-1",
+            "sign_type":"0",
+            "sign_status":"-1",
+            "is_free":"-1",
+            "preference":"-1",
+            "category_id":"0",
+            "recommend":"-1",
+            "book_relation":"-1",
+            "promotion_status":"-1",
+            "date":"",#2022-01-27 - 2022-02-08
+            "recharge_date":"",
+        }
+        s = requests.get(url, params=params, headers=headers).text
+        dict_s = json.loads(s)
+        df0 = pd.DataFrame(dict_s["data"])
+        with lock:
+            dfs.append(df0)   # 只追加，无需 concat
+
+    # 开启多线程
+    with Pool(10) as pool:
+        pool.map(fetch_page, range(1, page_num + 1))
+        
+    df_total = pd.concat(dfs, ignore_index=True) if dfs else pd.DataFrame()
+
+    df_copy = df_total[[
+        "book_id",
+        "book_pic_oss",
+        "content_length",
+        "other_name",
+        "book_name",
+        "book_info",
+        "writer_name",
+        "has_relation",
+        "category_name",
+        "status_name",
+        "check_user_name",
+        "section_total",
+        "show_sign_type",
+        "total_expend",
+        "total_recharge",
+        "read_rack_finish",
+        "total_price",
+        "book_source",
+        "is_free",
+        "money",
+        "able_unlock_for_bean",
+        "create_time",
+        "update_time",
+        "remark",
+    ]].copy()
+    df_copy.columns = [
+        "ID",
+        "封面",
+        "封面信息",
+        "小说名称(英)",
+        "小说名称(中)",
+        "书籍信息",
+        "作者笔名",
+        "关联书籍",
+        "分类",
+        "状态",
+        "审核人",
+        "总章节数",
+        "签约模式",
+        "总消耗额",
+        "充值额",
+        "阅读次数/加入书架人数/看完人数",
+        "整本售价($)",
+        "版权来源",
+        "付费方式",
+        "千字价格",
+        "可书币解锁",
+        "上架时间",
+        "最近更新时间",
         "备注"
     ]
     df_copy["总消耗额"] = df_copy["总消耗额"].astype("float")
