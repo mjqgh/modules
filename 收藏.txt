@@ -6,16 +6,19 @@ DeepSeek - 探索未至之境,https://chat.deepseek.com/
 腾讯元宝,https://yuanbao.tencent.com/chat/naQivTmsDa/f4ea3377-686a-4075-83e4-666116c4dca2
 豆包 - 字节跳动旗下 AI 智能助手,https://www.doubao.com/chat/?channel=dkR31
 
-##在线工具
-###在线PS
-Photopea,https://www.photopea.com/
-图改改在线PS,https://www.tugaigai.com/online_ps/
-体育,https://www.tugaigai.com/online_ps/
-
 ##创业
 基金,https://test-d0tajg5ssmzx.feishu.cn/wiki/W8Okw3XAWiLTfZk5pv1ctM3Tn7f?sheet=AKiTHi
 微信公众号,https://mp.weixin.qq.com/cgi-bin/filepage?type=2&count=12&begin=0&group_id=0&view=1&token=267637881&lang=zh_CN
 口袋里的生产力 - 知乎,https://www.zhihu.com/people/91-83-30-17-72
+
+##在线工具
+Base64 在线编码解码,https://base64.us/
+JSON在线视图查看器(Online JSON Viewer),https://www.bejson.com/jsonviewernew/
+JavaScript/HTML格式化-BeJSON.com,http://www.jsons.cn/urlencode
+Convertio-万能格式在线转换,https://convertio.co/zh/
+###在线PS
+Photopea,https://www.photopea.com/
+图改改在线PS,https://www.tugaigai.com/online_ps/
 
 
 #软件资源
@@ -24,6 +27,7 @@ Photopea,https://www.photopea.com/
 小刀娱乐网,https://www.xd0.com/
 黑域基地,https://www.hybase.com/
 芊芊精典,https://myqqjd.com/
-小众软件 - 分享免费、小巧、实用、有趣、绿色的软件,https://www.appinn.com/
 开源软件,https://kaiyuanapp.cn/
+小众软件 - 分享免费、小巧、实用、有趣、绿色的软件,https://www.appinn.com/
+绿软部落-专注于Windows_MacOS绿色软件分享的软件下载站,https://www.ludown.com/
 
