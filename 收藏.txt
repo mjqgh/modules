@@ -9,6 +9,7 @@ DeepSeek - 探索未至之境,https://chat.deepseek.com/
 微信公众号,https://mp.weixin.qq.com/cgi-bin/filepage?type=2&count=12&begin=0&group_id=0&view=1&token=267637881&lang=zh_CN
 口袋里的生产力 - 知乎,https://www.zhihu.com/people/91-83-30-17-72
 ##在线工具
+在线加水印,https://water.hereok.top/
 Base64 在线编码解码,https://base64.us/
 JSON在线视图查看器(Online JSON Viewer),https://www.bejson.com/jsonviewernew/
 JavaScript/HTML格式化-BeJSON.com,http://www.jsons.cn/urlencode
