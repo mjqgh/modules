@@ -6,6 +6,7 @@ DeepSeek - 探索未至之境,https://chat.deepseek.com/
 豆包,https://www.doubao.com/chat/?channel=dkR31
 ##创业
 基金,https://test-d0tajg5ssmzx.feishu.cn/wiki/W8Okw3XAWiLTfZk5pv1ctM3Tn7f?sheet=AKiTHi
+我的 - IPTV管理平台,http://mylive.oktvtest.org/sysadmin.php
 jtti宝塔Linux面板,https://38.47.221.208:10086/mjqmjq
 ali宝塔面板,https://47.106.231.71:35548/bb3b6deb
 百应宝塔Linux面板2,https://by.hereok.top/mjq666
