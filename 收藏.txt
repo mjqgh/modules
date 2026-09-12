@@ -1,9 +1,4 @@
 #工作类
-##AI网站
-DeepSeek - 探索未至之境,https://chat.deepseek.com/
-腾讯元宝,https://yuanbao.tencent.com/chat/naQivTmsDa/f4ea3377-686a-4075-83e4-666116c4dca2
-千问-Qwen最新模型体验,https://www.qianwen.com/
-豆包,https://www.doubao.com/chat/?channel=dkR31
 ##创业
 基金,https://test-d0tajg5ssmzx.feishu.cn/wiki/W8Okw3XAWiLTfZk5pv1ctM3Tn7f?sheet=AKiTHi
 我的 - IPTV管理平台,http://mylive.oktvtest.org/sysadmin.php
@@ -13,6 +8,11 @@ ali宝塔面板,https://47.106.231.71:35548/bb3b6deb
 iconfont-阿里巴巴矢量图标库,https://www.iconfont.cn/
 微信公众号,https://mp.weixin.qq.com/cgi-bin/filepage?type=2&count=12&begin=0&group_id=0&view=1&token=267637881&lang=zh_CN
 口袋里的生产力 - 知乎,https://www.zhihu.com/people/91-83-30-17-72
+##AI网站
+DeepSeek - 探索未至之境,https://chat.deepseek.com/
+腾讯元宝,https://yuanbao.tencent.com/chat/naQivTmsDa/f4ea3377-686a-4075-83e4-666116c4dca2
+千问-Qwen最新模型体验,https://www.qianwen.com/
+豆包,https://www.doubao.com/chat/?channel=dkR31
 ##电视直播
 恩山论坛 - 直播源共享,https://www.right.com.cn/forum/forum-182-2.html
 央视网CCTV5体育,http://sports.cctv.com/H5/CCTV5/index.shtml
