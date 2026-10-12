@@ -69,7 +69,7 @@ class PickNovel:
                 elif (book_id == bid) and ("待审核" in book_status):  # 找到但是待审核
                     pn_id = item['id']
                     self.piliang_edit_book_status(pn_id)  # 批量修改小说状态
-                    self.piliang_edit_book_price(pid=pn_id, kadian=kadian, price=43)  # 批量修改小说价格
+                    self.piliang_edit_book_price(pid=pn_id, kadian=kadian, price=44)  # 批量修改小说价格
                     break
                 else:
                     pn_id = 0 # 没有找到
